@@ -38,30 +38,15 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
   }, [rows])
 
   const totals = React.useMemo(() => {
-    let input = 0, output = 0, cacheC = 0, cacheR = 0, total = 0, cost = 0
+    let input = 0, output = 0, cacheR = 0, total = 0, cost = 0
     for (const r of rows) {
       input += r.inputTokens
       output += r.outputTokens
-      cacheC += r.cacheCreationTokens
       cacheR += r.cacheReadTokens
       total += r.totalTokens
       cost += r.totalCost
     }
-    return { input, output, cacheC, cacheR, total, cost }
-  }, [rows])
-
-  // Agents whose source never reports cacheCreationTokens (e.g. codex —
-  // OpenAI's API doesn't expose a separate "cache created" count). Render
-  // "—" for those rows so 0 isn't misread as real usage.
-  const agentsWithoutCacheCreate = React.useMemo(() => {
-    const seen = new Map<string, boolean>()
-    for (const r of rows) {
-      if (r.cacheCreationTokens > 0) seen.set(r.agent, true)
-      else if (!seen.has(r.agent)) seen.set(r.agent, false)
-    }
-    const out = new Set<string>()
-    for (const [agent, hasAny] of seen) if (!hasAny) out.add(agent)
-    return out
+    return { input, output, cacheR, total, cost }
   }, [rows])
 
   return (
@@ -92,7 +77,7 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
         <div className="px-4 pb-6 pt-2 text-xs text-muted-foreground">no rows in range</div>
       ) : (
         <div className="max-h-[28rem] overflow-auto">
-          <table className="w-full min-w-[960px] border-separate border-spacing-0 text-sm">
+          <table className="w-full min-w-[840px] border-separate border-spacing-0 text-sm">
             <thead>
               <tr>
                 <th className={cn(TH_BASE, 'pl-4')}>Date</th>
@@ -100,7 +85,6 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
                 <th className={TH_BASE}>Models</th>
                 <th className={TH_RIGHT}>Input</th>
                 <th className={TH_RIGHT}>Output</th>
-                <th className={TH_RIGHT}>Cache Create</th>
                 <th className={TH_RIGHT}>Cache Read</th>
                 <th className={TH_RIGHT}>Total Tokens</th>
                 <th className={cn(TH_RIGHT, 'pr-4')}>Cost (USD)</th>
@@ -131,13 +115,6 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
                   </td>
                   <td className={TD_RIGHT}>{fmtInt(r.inputTokens)}</td>
                   <td className={TD_RIGHT}>{fmtInt(r.outputTokens)}</td>
-                  <td className={TD_RIGHT}>
-                    {agentsWithoutCacheCreate.has(r.agent) ? (
-                      <span className="text-muted-foreground/60">—</span>
-                    ) : (
-                      fmtInt(r.cacheCreationTokens)
-                    )}
-                  </td>
                   <td className={TD_RIGHT}>{fmtInt(r.cacheReadTokens)}</td>
                   <td className={cn(TD_RIGHT, 'font-semibold')}>{fmtInt(r.totalTokens)}</td>
                   <td className={cn(TD_RIGHT, 'pr-4')}>${fmtCost(r.totalCost)}</td>
@@ -151,7 +128,6 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
                 <td className={cn(TD_BASE, 'text-muted-foreground')} />
                 <td className={cn(TD_RIGHT, 'font-semibold text-primary')}>{fmtInt(totals.input)}</td>
                 <td className={cn(TD_RIGHT, 'font-semibold text-primary')}>{fmtInt(totals.output)}</td>
-                <td className={cn(TD_RIGHT, 'font-semibold text-primary')}>{fmtInt(totals.cacheC)}</td>
                 <td className={cn(TD_RIGHT, 'font-semibold text-primary')}>{fmtInt(totals.cacheR)}</td>
                 <td className={cn(TD_RIGHT, 'font-semibold text-primary')}>{fmtInt(totals.total)}</td>
                 <td className={cn(TD_RIGHT, 'pr-4 font-semibold text-primary')}>${fmtCost(totals.cost)}</td>
