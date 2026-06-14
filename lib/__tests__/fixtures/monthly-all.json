@@ -1,0 +1,16 @@
+{
+  "monthly": [
+    {
+      "agent": "all",
+      "period": "2026-06",
+      "inputTokens": 5000,
+      "outputTokens": 2000,
+      "cacheCreationTokens": 100,
+      "cacheReadTokens": 50000,
+      "totalTokens": 57100,
+      "totalCost": 5.99,
+      "modelsUsed": ["claude-opus-4-7", "gpt-5.4"],
+      "metadata": { "agents": ["claude", "codex"] }
+    }
+  ]
+}

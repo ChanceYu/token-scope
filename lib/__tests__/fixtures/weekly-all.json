@@ -1,0 +1,16 @@
+{
+  "weekly": [
+    {
+      "agent": "all",
+      "period": "2026-W23",
+      "inputTokens": 1000,
+      "outputTokens": 400,
+      "cacheCreationTokens": 50,
+      "cacheReadTokens": 10000,
+      "totalTokens": 11450,
+      "totalCost": 1.21,
+      "modelsUsed": ["claude-opus-4-7"],
+      "metadata": { "agents": ["claude"] }
+    }
+  ]
+}

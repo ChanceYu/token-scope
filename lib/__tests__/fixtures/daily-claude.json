@@ -1,0 +1,16 @@
+{
+  "daily": [
+    {
+      "agent": "claude",
+      "period": "2026-06-10",
+      "inputTokens": 60,
+      "outputTokens": 30,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 500,
+      "totalTokens": 590,
+      "totalCost": 0.08,
+      "modelsUsed": ["claude-opus-4-7"],
+      "metadata": { "agents": ["claude"] }
+    }
+  ]
+}

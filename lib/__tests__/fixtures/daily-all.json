@@ -1,0 +1,28 @@
+{
+  "daily": [
+    {
+      "agent": "all",
+      "period": "2026-06-10",
+      "inputTokens": 100,
+      "outputTokens": 50,
+      "cacheCreationTokens": 0,
+      "cacheReadTokens": 1000,
+      "totalTokens": 1150,
+      "totalCost": 0.12,
+      "modelsUsed": ["claude-opus-4-7"],
+      "metadata": { "agents": ["claude", "codex"] }
+    },
+    {
+      "agent": "all",
+      "period": "2026-06-11",
+      "inputTokens": 200,
+      "outputTokens": 75,
+      "cacheCreationTokens": 10,
+      "cacheReadTokens": 2000,
+      "totalTokens": 2285,
+      "totalCost": 0.24,
+      "modelsUsed": ["claude-opus-4-7", "gpt-5.4"],
+      "metadata": { "agents": ["claude", "codex", "gemini"] }
+    }
+  ]
+}
