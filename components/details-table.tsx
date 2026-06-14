@@ -50,6 +50,20 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
     return { input, output, cacheC, cacheR, total, cost }
   }, [rows])
 
+  // Agents whose source never reports cacheCreationTokens (e.g. codex —
+  // OpenAI's API doesn't expose a separate "cache created" count). Render
+  // "—" for those rows so 0 isn't misread as real usage.
+  const agentsWithoutCacheCreate = React.useMemo(() => {
+    const seen = new Map<string, boolean>()
+    for (const r of rows) {
+      if (r.cacheCreationTokens > 0) seen.set(r.agent, true)
+      else if (!seen.has(r.agent)) seen.set(r.agent, false)
+    }
+    const out = new Set<string>()
+    for (const [agent, hasAny] of seen) if (!hasAny) out.add(agent)
+    return out
+  }, [rows])
+
   return (
     <section className="rounded-lg border border-primary/15 bg-card/55">
       <header className="flex items-center justify-between gap-2 px-4 py-3">
@@ -117,7 +131,13 @@ export function DetailsTable({ rows, loading, failedAgents, sourceError }: Props
                   </td>
                   <td className={TD_RIGHT}>{fmtInt(r.inputTokens)}</td>
                   <td className={TD_RIGHT}>{fmtInt(r.outputTokens)}</td>
-                  <td className={TD_RIGHT}>{fmtInt(r.cacheCreationTokens)}</td>
+                  <td className={TD_RIGHT}>
+                    {agentsWithoutCacheCreate.has(r.agent) ? (
+                      <span className="text-muted-foreground/60">—</span>
+                    ) : (
+                      fmtInt(r.cacheCreationTokens)
+                    )}
+                  </td>
                   <td className={TD_RIGHT}>{fmtInt(r.cacheReadTokens)}</td>
                   <td className={cn(TD_RIGHT, 'font-semibold')}>{fmtInt(r.totalTokens)}</td>
                   <td className={cn(TD_RIGHT, 'pr-4')}>${fmtCost(r.totalCost)}</td>
