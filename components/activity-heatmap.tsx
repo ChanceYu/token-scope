@@ -159,9 +159,14 @@ export function ActivityHeatmap({ rows, since, until }: Props) {
           <p className="mt-1 text-[10px] text-muted-foreground">Daily token usage</p>
         </div>
         <div className="rounded-md border border-primary/15 bg-background/20 px-2 py-1 text-right tabular-nums">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Peak</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            Active Days
+          </div>
           <div className="text-sm font-medium text-foreground">
-            {data.stats.peak ? formatTokens(data.stats.peak.value) : '0'}
+            {data.stats.activeDays}
+            <span className="ml-1 text-[10px] font-normal text-muted-foreground">
+              / {data.days.length}
+            </span>
           </div>
         </div>
       </header>
@@ -232,16 +237,16 @@ export function ActivityHeatmap({ rows, since, until }: Props) {
 
           <div className="mt-3 grid grid-cols-3 gap-2 border-t border-primary/15 pt-3">
             <Stat
+              label="Peak"
+              value={data.stats.peak ? formatTokens(data.stats.peak.value) : '0'}
+              detail={data.stats.peak ? formatShortDate(data.stats.peak.key) : '-'}
+            />
+            <Stat
               label="Peak Day"
               value={data.stats.peak ? formatShortDate(data.stats.peak.key) : '-'}
               detail={data.stats.peak ? formatTokens(data.stats.peak.value) : '0'}
             />
             <Stat label="Avg Daily" value={formatTokens(data.stats.average)} detail="tokens" />
-            <Stat
-              label="Active Days"
-              value={String(data.stats.activeDays)}
-              detail={`of ${data.days.length}`}
-            />
           </div>
         </>
       )}
